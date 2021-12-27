@@ -1,10 +1,19 @@
 # Put your desired region and the name of your AWS profile here:
 provider "aws" {
   region = "us-east-1"
-  profile = "[PROFILE_NAME]"
+  # profile = "[PROFILE_NAME]"
+}
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 2.7"
+    }
+  }
 }
 
-resource "aws_iam_role" "empty_instance_role" {
+
+resource "aws_iam_role" "splunk_instance_role" {
   name = "${var.name}-role"
   tags = var.tags
   assume_role_policy = <<EOF
@@ -19,10 +28,10 @@ resource "aws_iam_role" "empty_instance_role" {
 }
 EOF
 }
-resource "aws_iam_instance_profile" "empty_instance_profile" {
+resource "aws_iam_instance_profile" "splunk_instance_profile" {
   name = "${var.name}-instance-profile"
   path = "/"
-  role = aws_iam_role.empty_instance_role.name
+  role = aws_iam_role.splunk_instance_role.name
 }
 
 module "lb_security_group" {
@@ -38,7 +47,7 @@ module "bastion_host" {
   vpc_id = var.vpc_id
   subnet_id = var.public_subnet_id_1
   ssh_key_name = var.ssh_key_name
-  instance_profile_name = aws_iam_instance_profile.empty_instance_profile.name
+  instance_profile_name = aws_iam_instance_profile.splunk_instance_profile.name
   tags = var.tags
 }
 
@@ -53,7 +62,7 @@ module "heavy_forwarder" {
   instance_type = var.instance_type
   lb_security_group_id = module.lb_security_group.id
   bastion_host_security_group_id = module.bastion_host.security_group_id
-  instance_profile_name = aws_iam_instance_profile.empty_instance_profile.name
+  instance_profile_name = aws_iam_instance_profile.splunk_instance_profile.name
   tags = var.tags
 }
 

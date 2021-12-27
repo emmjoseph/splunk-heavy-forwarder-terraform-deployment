@@ -6,8 +6,8 @@ This performs the following steps:
 
  1. Generates an empty AWS instance profile/role to associate with all resources (this prevents them from having any permissions via metadata endpoints)
  2. Uses the AMI built from the associated Packer repository to deploy a Splunk HFW into a private subnet
- 3. Deploys a bastion host/jump box into a public subnet
- 4. Allows SSH traffic from the bastion host to the HFW
+ 3. Deploys a splunk host/jump box into a public subnet
+ 4. Allows SSH traffic from the splunk host to the HFW
  5. Deploys an application load balancer to the public subnet
  6. Allows HTTPS traffic from the load balancer to the HFW
  7. Allows HTTPS traffic from the internet to access the load balancer
@@ -49,7 +49,7 @@ To run Terraform you will need to collect the following pieces of information, m
  1. A name for your deployment
  2. The region you wish to deploy to
  3. The ID of the VPC you want to deploy to (e.g. `vpc-xxxxxxxxxxxxxxxxx`)
- 4. The ID of the public subnet where the HFW/bastion host will be deployed (e.g. `subnet-xxxxxxxxxxxxxxxxx`)
+ 4. The ID of the public subnet where the HFW/splunk host will be deployed (e.g. `subnet-xxxxxxxxxxxxxxxxx`)
  5. The ID of another public subnet - application load balancers require 2 public subnets (e.g. `subnet-xxxxxxxxxxxxxxxxx`)
  6. The name of an SSH key in AWS (must be in the same region where you are deploying)
  7. The domain you want to attach to the load balancer. It must exist in a Route53 hosted DNS zone (e.g. `hfw.aws.example.com`)
@@ -69,10 +69,10 @@ terraform apply
 
 ## SSH
 
-Your HFW can be administered via the admin UI, but it can also be administered via SSH.  The security group on the HFW is configured to only allow traffic from the bastion host.  By default the security group for the bastion host does not allow any incoming traffic.  Therefore to connect to the HFW via SSH you will first have to update the security group for the bastion host to allow traffic from your IP address.  Then you will be able to connect using the bastion host as a proxy.  That SSH command to connect to the HFW through the bastion host will look something like this:
+Your HFW can be administered via the admin UI, but it can also be administered via SSH.  The security group on the HFW is configured to only allow traffic from the splunk host.  By default the security group for the splunk host does not allow any incoming traffic.  Therefore to connect to the HFW via SSH you will first have to update the security group for the splunk host to allow traffic from your IP address.  Then you will be able to connect using the splunk host as a proxy.  That SSH command to connect to the HFW through the splunk host will look something like this:
 
 ```
-ssh -i [SSH_PRIVATE_KEY_FILE] ec2-user@[HFW_PRIVATE_IP] -o "proxycommand ssh -W %h:%p -i [SSH_PRIVATE_KEY_FILE] ec2-user@[BASTION_HOST_PUBLIC_IP]"
+ssh -i [SSH_PRIVATE_KEY_FILE] ec2-user@[HFW_PRIVATE_IP] -o "proxycommand ssh -W %h:%p -i [SSH_PRIVATE_KEY_FILE] ec2-user@[splunk_HOST_PUBLIC_IP]"
 ```
 
 You can lookup the ip addresses of your infrastructure using the AWS console or terraform will tell you if you execute:

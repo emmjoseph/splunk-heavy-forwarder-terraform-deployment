@@ -24,8 +24,8 @@ resource "aws_security_group_rule" "allow_inbound_https" {
 
 resource "aws_security_group_rule" "allow_inbound_hec" {
   type = "ingress"
-  from_port = "8088"
-  to_port = "8088"
+  from_port = "9997"
+  to_port = "9997"
   protocol = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = aws_security_group.elb.id

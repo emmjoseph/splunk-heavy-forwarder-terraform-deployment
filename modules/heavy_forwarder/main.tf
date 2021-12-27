@@ -41,8 +41,8 @@ resource "aws_security_group_rule" "allow_lb_https_inbound" {
 resource "aws_security_group_rule" "allow_lb_hec_inbound" {
   description = "HEC inbound from load balancer"
   type = "ingress"
-  from_port = 8088
-  to_port = 8088
+  from_port = 9997
+  to_port = 9997
   protocol = "tcp"
   source_security_group_id = var.lb_security_group_id
   security_group_id = aws_security_group.heavy_forwarder.id
@@ -50,11 +50,11 @@ resource "aws_security_group_rule" "allow_lb_hec_inbound" {
 
 data "aws_ami" "heavy_forwarder" {
   most_recent = true
-  owners = ["self"]
+  owners = ["099720109477"]
 
   filter {
     name = "name"
-    values = [var.ami_name]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20211129"]
   }
 }
 

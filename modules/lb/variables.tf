@@ -26,6 +26,7 @@ variable "heavy_forwarder_instance_id" {
 variable "domain" {
   description = "The domain name to host the LB at.  You will also have to create an SSL certificate in AWS for the domain name."
   type = string
+  default = "splunk.happyreturns.com"
 }
 
 variable "dns_zone" {

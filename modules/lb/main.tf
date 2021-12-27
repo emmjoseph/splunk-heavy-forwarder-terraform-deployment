@@ -3,7 +3,7 @@ data "aws_route53_zone" "default" {
 }
 
 data "aws_acm_certificate" "cert" {
-  domain = var.domain
+domain = "splunkhappy.com"
 }
 
 resource "aws_lb" "main_alb" {
@@ -70,7 +70,7 @@ resource "aws_lb_listener" "main_alb_https" {
 # The HEC port doesn't have a health check so just use the HTTPS health check
 resource "aws_lb_target_group" "main_hec_tg" {
   name = "splunk-hfw-hec-tg"
-  port = 8088
+  port = 9997
   protocol = "HTTPS"
   vpc_id = var.vpc_id
 
@@ -96,7 +96,7 @@ resource "aws_alb_target_group_attachment" "heavy_forwarder_hec" {
 
 resource "aws_lb_listener" "main_alb_hec" {
   load_balancer_arn = aws_lb.main_alb.arn
-  port = "8088"
+  port = "9997"
   protocol = "HTTPS"
   ssl_policy = "ELBSecurityPolicy-TLS-1-2-2017-01"
   certificate_arn = data.aws_acm_certificate.cert.arn

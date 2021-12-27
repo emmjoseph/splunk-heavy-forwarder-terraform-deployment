@@ -6,6 +6,7 @@ variable "name" {
 variable "vpc_id" {
   description = "The id of the VPC to put everything in"
   type = string
+  default = "vpc-0686df17dcbc89cc2"
 }
 
 variable "splunk_admin_password" {
@@ -16,16 +17,19 @@ variable "splunk_admin_password" {
 variable "public_subnet_id_1" {
   description = "The id of the public subnet to put the bastion host and/or the splunk forwarder in"
   type = string
+  default = "subnet-0d09479eb7202b53f"
 }
 
 variable "public_subnet_id_2" {
   description = "The id of a second public subnet (application load balancers require 2 subnets)"
   type = string
+  default = "subnet-08aca2a2c73a21ce1"
 }
 
 variable "ssh_key_name" {
   description = "The name of an SSH key to attach to the instances"
   type = string
+  default = "splunkhfw"
 }
 
 variable "domain" {
